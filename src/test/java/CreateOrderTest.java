@@ -16,7 +16,7 @@ public class CreateOrderTest {
     BurgerClient burgerClient;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         user = UserGenerator.getRandomUser();
         userClient = new UserClient();
         burger = new Burger();
@@ -25,55 +25,57 @@ public class CreateOrderTest {
     }
 
     @After
-    public void tearDown(){
+    public void tearDown() {
         userClient.delete(user);
     }
 
     @Test
     @DisplayName("Создание заказа авторизованным пользователем")
-    public void createOrderForAuthorizedUser(){
-        ValidatableResponse validatableResponse = burgerClient.createOrder(burger,user);
+    public void createOrderForAuthorizedUser() {
+        burgerClient.addIngredients(burger);
+        ValidatableResponse validatableResponse = burgerClient.createOrder(burger, user);
 
 
         validatableResponse.assertThat().statusCode(SC_OK);
-        validatableResponse.assertThat().body("success",equalTo(true));
+        validatableResponse.assertThat().body("success", equalTo(true));
     }
 
     @Test
     @DisplayName("Создание заказа неавторизованным пользователем")
-    public void createOrderForUnauthorizedUser(){
+    public void createOrderForUnauthorizedUser() {
         user.setAccessToken(null);
-        ValidatableResponse validatableResponse = burgerClient.createOrder(burger,user);
+        burgerClient.addIngredients(burger);
+        ValidatableResponse validatableResponse = burgerClient.createOrder(burger, user);
 
 
         validatableResponse.assertThat().statusCode(SC_OK);
-        validatableResponse.assertThat().body("success",equalTo(true));
+        validatableResponse.assertThat().body("success", equalTo(true));
     }
 
     @Test
     @DisplayName("Создание заказа с ингредиентами")
-    public void createOrderWithIngredients(){
-        ValidatableResponse validatableResponse = burgerClient.createOrder(burger,user);
+    public void createOrderWithIngredients() {
+        burgerClient.addIngredients(burger);
 
-
+        ValidatableResponse validatableResponse = burgerClient.createOrder(burger, user);
         validatableResponse.assertThat().statusCode(SC_OK);
-        validatableResponse.assertThat().body("success",equalTo(true));
+        validatableResponse.assertThat().body("success", equalTo(true));
     }
 
     @Test
     @DisplayName("Создание пустого заказа")
-    public void createEmptyOrder(){
-        ValidatableResponse validatableResponse = burgerClient.createOrder(burger,user);
+    public void createEmptyOrder() {
+        ValidatableResponse validatableResponse = burgerClient.createOrder(burger, user);
         validatableResponse.assertThat().statusCode(SC_BAD_REQUEST);
-        validatableResponse.assertThat().body("message",equalTo("Ingredient ids must be provided"));
+        validatableResponse.assertThat().body("message", equalTo("Ingredient ids must be provided"));
     }
 
     @Test
     @DisplayName("Создание заказа с неверным хешем ингредиентов")
-    public void createOrderWithInvalidHashes(){
-        String[] incorrectIngredients = {"test","test"};
+    public void createOrderWithInvalidHashes() {
+        String[] incorrectIngredients = {"test", "test"};
         burger.setIngredients(incorrectIngredients);
-        ValidatableResponse validatableResponse = burgerClient.createOrder(burger,user);
+        ValidatableResponse validatableResponse = burgerClient.createOrder(burger, user);
         validatableResponse.assertThat().statusCode(SC_INTERNAL_SERVER_ERROR);
     }
 }
