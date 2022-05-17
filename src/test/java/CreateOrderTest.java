@@ -1,4 +1,6 @@
 import com.ya.*;
+import com.ya.models.Burger;
+import com.ya.models.User;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import org.junit.After;
@@ -17,7 +19,7 @@ public class CreateOrderTest {
 
     @Before
     public void setUp() {
-        user = UserGenerator.getRandomUser();
+        user = TestDataGenerator.getRandomUser();
         userClient = new UserClient();
         burger = new Burger();
         burgerClient = new BurgerClient();
@@ -32,7 +34,7 @@ public class CreateOrderTest {
     @Test
     @DisplayName("Создание заказа авторизованным пользователем")
     public void createOrderForAuthorizedUser() {
-        burgerClient.addIngredients(burger);
+        burger.setIngredients(TestDataGenerator.getIngredients());
         ValidatableResponse validatableResponse = burgerClient.createOrder(burger, user);
 
 
@@ -44,7 +46,7 @@ public class CreateOrderTest {
     @DisplayName("Создание заказа неавторизованным пользователем")
     public void createOrderForUnauthorizedUser() {
         user.setAccessToken(null);
-        burgerClient.addIngredients(burger);
+        burger.setIngredients(TestDataGenerator.getIngredients());
         ValidatableResponse validatableResponse = burgerClient.createOrder(burger, user);
 
 
@@ -55,7 +57,7 @@ public class CreateOrderTest {
     @Test
     @DisplayName("Создание заказа с ингредиентами")
     public void createOrderWithIngredients() {
-        burgerClient.addIngredients(burger);
+        burger.setIngredients(TestDataGenerator.getIngredients());
 
         ValidatableResponse validatableResponse = burgerClient.createOrder(burger, user);
         validatableResponse.assertThat().statusCode(SC_OK);

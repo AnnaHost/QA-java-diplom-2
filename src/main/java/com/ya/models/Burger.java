@@ -1,4 +1,4 @@
-package com.ya;
+package com.ya.models;
 
 public class Burger {
 

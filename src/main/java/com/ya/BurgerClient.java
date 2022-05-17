@@ -1,5 +1,7 @@
 package com.ya;
 
+import com.ya.models.Burger;
+import com.ya.models.User;
 import io.restassured.response.ValidatableResponse;
 
 import static io.restassured.RestAssured.given;
@@ -27,9 +29,6 @@ public class BurgerClient extends BurgerRestClient{
 
     }
 
-    public void addIngredients(Burger burger){
-        String ingredients[] = {"61c0c5a71d1f82001bdaaa6d","61c0c5a71d1f82001bdaaa6f","61c0c5a71d1f82001bdaaa70"};
-        burger.setIngredients(ingredients);
-    }
+
 
 }

@@ -1,6 +1,6 @@
-import com.ya.User;
+import com.ya.models.User;
 import com.ya.UserClient;
-import com.ya.UserGenerator;
+import com.ya.TestDataGenerator;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import org.junit.After;
@@ -18,7 +18,7 @@ public class UserLoginTest {
 
     @Before
     public void setUp(){
-        user = UserGenerator.getRandomUser();
+        user = TestDataGenerator.getRandomUser();
         userClient = new UserClient();
         userClient.create(user);
     }

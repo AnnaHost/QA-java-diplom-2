@@ -1,5 +1,6 @@
 package com.ya;
 
+import com.ya.models.User;
 import io.qameta.allure.Step;
 import io.restassured.response.ValidatableResponse;
 
